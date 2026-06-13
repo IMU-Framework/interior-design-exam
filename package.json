@@ -1,0 +1,18 @@
+{
+  "name": "repo",
+  "version": "1.0.0",
+  "description": "This is a **handoff bundle** from Claude Design (claude.ai/design).",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel project/icons.jsx project/qimage.jsx project/home.jsx project/practice.jsx project/exam-screen.jsx project/result.jsx project/app.jsx --presets @babel/preset-react --out-dir js/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.29.7",
+    "@babel/core": "^7.29.7",
+    "@babel/preset-react": "^7.29.7"
+  }
+}
