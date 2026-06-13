@@ -1,6 +1,8 @@
 /* ============ admin.jsx — 題庫管理後台 ============ */
 const { useState, useEffect, useRef, useMemo, useCallback } = React;
 
+const MEMBERS_API = 'https://hzglygfmhptvwgxphydo.supabase.co/functions/v1/admin-members';
+
 const A_ICON = {
   search: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>,
   check: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M20 6 9 17l-5-5"/></svg>,
@@ -12,6 +14,9 @@ const A_ICON = {
   undo: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M3 7v6h6M3 13a9 9 0 1 0 3-7.7L3 8"/></svg>,
   sun: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" {...p}><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>,
   moon: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>,
+  users: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+  ban: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>,
+  refresh: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.5 9a9 9 0 0 1 14.8-3.3L23 10M1 14l4.7 4.3A9 9 0 0 0 20.5 15"/></svg>,
 };
 
 function ThemeToggle({ theme, setTheme }) {
@@ -71,7 +76,7 @@ function sameQ(a, b) {
 }
 
 /* ===================================================================== */
-function Admin() {
+function Admin({ extraHeaderSlot } = {}) {
   const [theme, setTheme] = useState(() => {
     try { return localStorage.getItem('ylab_theme') || 'light'; } catch (e) { return 'light'; }
   });
@@ -198,6 +203,7 @@ function Admin() {
           <button className="btn btn-primary" onClick={() => setExportOpen(true)}>
             <A_ICON.download style={{ width: 16, height: 16 }} />匯出 JSON
           </button>
+          {extraHeaderSlot}
           <ThemeToggle theme={theme} setTheme={setTheme} />
         </div>
       </div>
@@ -507,4 +513,209 @@ function ExportSheet({ banks, dirtyByCode, totalDirty, onResetAll, onClose }) {
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<Admin />);
+/* ===================================================================== */
+/* 會員管理面板                                                            */
+/* ===================================================================== */
+const MEMBERS_SS_KEY = 'ylab_admin_secret';
+
+function MembersPanel() {
+  const [secret, setSecret] = useState(() => sessionStorage.getItem(MEMBERS_SS_KEY) || '');
+  const [secretInput, setSecretInput] = useState('');
+  const [members, setMembers] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [addEmail, setAddEmail] = useState('');
+  const [adding, setAdding] = useState(false);
+  const [addMsg, setAddMsg] = useState('');
+  const [filter, setFilter] = useState('');
+
+  async function apiFetch(method, body) {
+    const res = await fetch(MEMBERS_API, {
+      method,
+      headers: { 'Content-Type': 'application/json', 'x-admin-secret': secret },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    if (res.status === 401) { setError('密碼錯誤'); setSecret(''); sessionStorage.removeItem(MEMBERS_SS_KEY); return null; }
+    if (!res.ok) { setError('伺服器錯誤 ' + res.status); return null; }
+    return res.json();
+  }
+
+  async function load() {
+    setLoading(true); setError('');
+    const data = await apiFetch('GET');
+    if (data) setMembers(data);
+    setLoading(false);
+  }
+
+  useEffect(() => { if (secret) load(); }, [secret]);
+
+  async function addMember() {
+    if (!addEmail.trim()) return;
+    setAdding(true); setAddMsg('');
+    const res = await apiFetch('POST', { email: addEmail.trim() });
+    if (res?.ok) {
+      setAddMsg('已新增 ' + addEmail.trim());
+      setAddEmail('');
+      await load();
+    }
+    setAdding(false);
+  }
+
+  async function toggleStatus(email, currentStatus) {
+    const next = currentStatus === 'active' ? 'revoked' : 'active';
+    await apiFetch('PATCH', { email, status: next });
+    await load();
+  }
+
+  if (!secret) {
+    return (
+      <div className="members-auth">
+        <div className="members-auth-box">
+          <A_ICON.users style={{ width: 32, height: 32, opacity: .4, marginBottom: 16 }} />
+          <div className="members-auth-title">輸入 Admin Secret 以存取會員管理</div>
+          {error && <div className="members-error">{error}</div>}
+          <input
+            type="password" className="members-secret-input" placeholder="Admin Secret"
+            value={secretInput} onChange={e => setSecretInput(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter') { sessionStorage.setItem(MEMBERS_SS_KEY, secretInput); setSecret(secretInput); } }}
+          />
+          <button className="btn btn-primary" onClick={() => { sessionStorage.setItem(MEMBERS_SS_KEY, secretInput); setSecret(secretInput); }}>
+            進入
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const filtered = (members || []).filter(m =>
+    !filter || m.email.includes(filter.toLowerCase())
+  );
+
+  return (
+    <div className="members-panel">
+      <div className="members-toolbar">
+        <div className="members-add">
+          <input
+            type="email" placeholder="新增會員 email…" value={addEmail}
+            onChange={e => { setAddEmail(e.target.value); setAddMsg(''); }}
+            onKeyDown={e => e.key === 'Enter' && addMember()}
+          />
+          <button className="btn btn-primary" onClick={addMember} disabled={adding || !addEmail.trim()}>
+            {adding ? '新增中…' : '新增'}
+          </button>
+          {addMsg && <span className="members-addmsg">{addMsg}</span>}
+        </div>
+        <span className="spacer" />
+        <div className="search-row" style={{ width: 220 }}>
+          <A_ICON.search />
+          <input value={filter} onChange={e => setFilter(e.target.value)} placeholder="搜尋 email…" />
+        </div>
+        <button className="btn btn-ghost" onClick={load} disabled={loading} title="重新整理">
+          <A_ICON.refresh style={{ width: 15, height: 15 }} />
+        </button>
+      </div>
+
+      {error && <div className="members-error" style={{ margin: '0 0 12px' }}>{error}</div>}
+
+      {loading && !members && <div className="members-loading">載入中…</div>}
+
+      {members && (
+        <div className="members-table-wrap">
+          <table className="members-table">
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>狀態</th>
+                <th>付款時間</th>
+                <th>訂單 ID</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.length === 0 && (
+                <tr><td colSpan={5} style={{ textAlign: 'center', opacity: .5, padding: '24px 0' }}>無符合會員</td></tr>
+              )}
+              {filtered.map(m => (
+                <tr key={m.email} className={m.status === 'revoked' ? 'revoked' : ''}>
+                  <td className="mono">{m.email}{m.is_admin && <span className="tag adm" style={{ marginLeft: 6 }}>Admin</span>}</td>
+                  <td>
+                    <span className={'mbadge ' + m.status}>{m.status === 'active' ? '啟用' : '已停用'}</span>
+                  </td>
+                  <td className="mono faint">{m.paid_at ? new Date(m.paid_at).toLocaleDateString('zh-TW') : '—'}</td>
+                  <td className="mono faint" style={{ fontSize: 11 }}>{m.source_order_id || '—'}</td>
+                  <td>
+                    {!m.is_admin && (
+                      <button
+                        className={'btn btn-ghost btn-sm' + (m.status === 'active' ? ' danger' : '')}
+                        onClick={() => toggleStatus(m.email, m.status)}
+                        title={m.status === 'active' ? '停用' : '重新啟用'}
+                      >
+                        {m.status === 'active'
+                          ? <><A_ICON.ban style={{ width: 13, height: 13 }} />停用</>
+                          : <><A_ICON.refresh style={{ width: 13, height: 13 }} />啟用</>}
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="members-count">{filtered.length} / {members.length} 位會員</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ===================================================================== */
+/* Admin root: 加入「會員」頁籤切換                                        */
+/* ===================================================================== */
+function AdminRoot() {
+  const [tab, setTab] = useState('bank'); // 'bank' | 'members'
+
+  return (
+    <div style={{ display: 'contents' }}>
+      {tab === 'bank'
+        ? <Admin extraHeaderSlot={
+            <button className="btn btn-ghost" onClick={() => setTab('members')} style={{ gap: 5 }}>
+              <A_ICON.users style={{ width: 15, height: 15 }} />會員管理
+            </button>
+          } />
+        : <MembersShell onBack={() => setTab('bank')} />
+      }
+    </div>
+  );
+}
+
+function MembersShell({ onBack }) {
+  const [theme, setTheme] = useState(() => {
+    try { return localStorage.getItem('ylab_theme') || 'light'; } catch { return 'light'; }
+  });
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    try { localStorage.setItem('ylab_theme', theme); } catch {}
+  }, [theme]);
+
+  return (
+    <div className="admin-shell">
+      <div className="admin-top">
+        <div className="admin-top-inner">
+          <button className="btn btn-ghost" onClick={onBack} style={{ gap: 5 }}>
+            ← 題庫管理
+          </button>
+          <div className="brand" style={{ marginLeft: 8 }}>
+            <A_ICON.users style={{ width: 20, height: 20 }} />
+            <span>會員管理<span className="brand-sub">查看、新增、停用付費會員</span></span>
+          </div>
+          <span className="spacer" />
+          <ThemeToggle theme={theme} setTheme={setTheme} />
+        </div>
+      </div>
+      <div style={{ flex: 1, overflow: 'auto' }}>
+        <MembersPanel />
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<AdminRoot />);

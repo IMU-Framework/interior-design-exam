@@ -186,3 +186,37 @@
   .editor { padding: 24px 18px 120px; }
   .ed-actions { margin: 0 -18px; padding: 14px 18px; }
 }
+
+/* ===================================================================== */
+/* 會員管理                                                                */
+/* ===================================================================== */
+.members-auth { display: flex; align-items: center; justify-content: center; flex: 1; padding: 40px 20px; }
+.members-auth-box { display: flex; flex-direction: column; align-items: center; gap: 14px; max-width: 340px; width: 100%; padding: 40px 32px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.members-auth-title { font-size: 14px; color: var(--faint); text-align: center; }
+.members-secret-input { width: 100%; padding: 10px 14px; border: 1px solid var(--line-strong); border-radius: var(--radius-sm); background: var(--bg); color: var(--text); font-size: 14px; }
+.members-error { color: var(--wrong, #e53e3e); font-size: 13px; }
+
+.members-panel { display: flex; flex-direction: column; gap: 0; padding: 24px 28px; max-width: 900px; margin: 0 auto; width: 100%; }
+.members-toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+.members-add { display: flex; align-items: center; gap: 8px; }
+.members-add input { padding: 9px 13px; border: 1px solid var(--line-strong); border-radius: var(--radius-sm); background: var(--bg); color: var(--text); font-size: 14px; width: 260px; }
+.members-addmsg { font-size: 13px; color: var(--correct, #2f855a); }
+.members-loading { text-align: center; padding: 48px; color: var(--faint); }
+
+.members-table-wrap { overflow-x: auto; }
+.members-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.members-table th { text-align: left; padding: 8px 14px; font-size: 11.5px; font-weight: 600; color: var(--faint); text-transform: uppercase; letter-spacing: .04em; border-bottom: 1px solid var(--line); }
+.members-table td { padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.members-table tr.revoked td { opacity: .45; }
+.members-table tr:hover td { background: var(--surface); }
+.members-count { font-size: 12px; color: var(--faint); padding: 10px 14px; text-align: right; }
+
+.mbadge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11.5px; font-weight: 600; }
+.mbadge.active { background: var(--correct-bg, #f0fff4); color: var(--correct, #276749); }
+.mbadge.revoked { background: var(--surface); color: var(--faint); }
+
+.tag.adm { background: var(--accent-bg, #ebf4ff); color: var(--accent, #2b6cb0); border: none; }
+.btn.btn-sm { padding: 4px 10px; font-size: 12px; gap: 4px; }
+.btn.danger { color: var(--wrong, #c53030); }
+.btn.danger:hover { background: var(--wrong-bg, #fff5f5); }
+.faint { color: var(--faint); }
