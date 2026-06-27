@@ -128,9 +128,9 @@ function ExamScreen({
     className: "icon-btn",
     "aria-label": "\u96E2\u958B",
     onClick: onExit
-  }, /*#__PURE__*/React.createElement(Icon.back, null)), showTimer ? /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement(Icon.back, null)), showTimer && /*#__PURE__*/React.createElement("div", {
     className: 'timer mono' + (warn ? ' warn' : '')
-  }, /*#__PURE__*/React.createElement(Icon.clock, null), fmtTime(remaining)) : mode === 'study' ? /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement(Icon.clock, null), fmtTime(remaining)), config.instantFeedback ? /*#__PURE__*/React.createElement("div", {
     className: "timer mono",
     style: {
       borderColor: 'var(--ok)',
@@ -141,14 +141,14 @@ function ExamScreen({
       width: 14,
       height: 14
     }
-  }), correctSoFar, "/", seenCount) : /*#__PURE__*/React.createElement("div", {
+  }), correctSoFar, "/", seenCount) : !showTimer && /*#__PURE__*/React.createElement("div", {
     className: "timer mono"
-  }, /*#__PURE__*/React.createElement(Icon.grid, {
+  }, /*#__PURE__*/React.createElement(Icon.check, {
     style: {
       width: 14,
       height: 14
     }
-  }), mode === 'draw' ? '練習' : ''), /*#__PURE__*/React.createElement("div", {
+  }), answeredCount, "/", total), /*#__PURE__*/React.createElement("div", {
     className: "progress-mini"
   }, mode === 'study' ? /*#__PURE__*/React.createElement(React.Fragment, null, "\u5DF2\u7DF4 ", /*#__PURE__*/React.createElement("b", null, seenCount), " / ", total) : /*#__PURE__*/React.createElement(React.Fragment, null, "\u5DF2\u7B54 ", /*#__PURE__*/React.createElement("b", null, answeredCount), " / ", total)), /*#__PURE__*/React.createElement("div", {
     className: "spacer"
@@ -162,7 +162,10 @@ function ExamScreen({
     },
     onClick: () => setConfirmOpen(true)
   }, submitLabel))), /*#__PURE__*/React.createElement("div", {
-    className: "wrap exam-body"
+    className: "wrap exam-body",
+    style: {
+      padding: "16px 16px 132px"
+    }
   }, /*#__PURE__*/React.createElement("div", {
     className: "q-head"
   }, /*#__PURE__*/React.createElement("span", {

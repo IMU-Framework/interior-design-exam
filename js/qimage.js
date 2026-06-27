@@ -62,6 +62,8 @@ function StemImage({
   const [failed, setFailed] = React.useState(false);
   if (isOptionImageQ(q)) return null; // 選項圖題不畫題幹圖
   if (hasInlineImg(q.stem)) return null; // 圖已內嵌於題幹文字中
+  // 圖內嵌於各選項（如電器符號選項）時，題幹本身無圖，不顯示題幹圖／placeholder
+  if (Array.isArray(q.opts) && q.opts.some(hasInlineImg)) return null;
   if (failed) {
     return /*#__PURE__*/React.createElement("div", {
       className: "img-placeholder"

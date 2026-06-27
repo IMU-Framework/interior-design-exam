@@ -25,7 +25,10 @@ function Home({
     theme: theme,
     setTheme: setTheme
   }))), /*#__PURE__*/React.createElement("div", {
-    className: "wrap home"
+    className: "wrap home",
+    style: {
+      padding: "16px 16px 112px"
+    }
   }, /*#__PURE__*/React.createElement("div", {
     className: "eyebrow"
   }, "12500 \u5EFA\u7BC9\u7269\u5BA4\u5167\u8A2D\u8A08 \xB7 \u4E59\u7D1A"), /*#__PURE__*/React.createElement("h1", null, "\u5B78\u79D1\u6E2C\u9A57\u6A21\u64EC\u6A5F"), /*#__PURE__*/React.createElement("p", {
@@ -69,7 +72,7 @@ function Home({
   }, "\u653E\u68C4"), /*#__PURE__*/React.createElement("button", {
     className: "btn btn-primary",
     onClick: onResume
-  }, "\u7E7C\u7E8C ", /*#__PURE__*/React.createElement(Icon.arrow, null))), /*#__PURE__*/React.createElement("div", {
+  }, "\u7E7C\u7E8C")), /*#__PURE__*/React.createElement("div", {
     className: "section-label"
   }, /*#__PURE__*/React.createElement("h2", null, "\u6E2C\u9A57\u6A21\u5F0F"), /*#__PURE__*/React.createElement("span", {
     className: "hint"
@@ -102,7 +105,9 @@ function Home({
     className: "mode-body"
   }, /*#__PURE__*/React.createElement("h3", null, "\u4F9D\u984C\u7D44\u9010\u984C\u7DF4\u7FD2"), /*#__PURE__*/React.createElement("p", null, "\u9010\u984C\u700F\u89BD\u6574\u500B\u984C\u7D44\u3001\u5373\u6642\u5C0D\u7167\u7B54\u6848\uFF0C\u8A18\u9304\u7CBE\u719F\u9032\u5EA6")), /*#__PURE__*/React.createElement("span", {
     className: "mode-arrow"
-  }, /*#__PURE__*/React.createElement(Icon.arrow, null))))));
+  }, /*#__PURE__*/React.createElement(Icon.arrow, null)))), /*#__PURE__*/React.createElement("footer", {
+    className: "home-footer"
+  }, "\u7248\u6B0A\u53CA\u514D\u8CAC\u8072\u660E \xA9 2026 IMU Framework Ltd. \u88FD\u4F5C\u3002\u984C\u5EAB\u5167\u5BB9\u7531\u52DE\u52D5\u90E8\u52DE\u52D5\u529B\u767C\u5C55\u7F72\u6280\u80FD\u6AA2\u5B9A\u4E2D\u5FC3\u63D0\u4F9B\uFF0CIMU Framework Ltd. \u5C0D\u984C\u5EAB\u5167\u5BB9\u4E0D\u627F\u64D4\u4EFB\u4F55\u6CD5\u5F8B\u8CAC\u4EFB\u3002")));
 }
 function SpecRow({
   k,

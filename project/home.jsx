@@ -18,7 +18,7 @@ function Home({ theme, setTheme, onStart, onResume, resume }) {
         </div>
       </div>
 
-      <div className="wrap home">
+      <div className="wrap home" style={{ padding: "16px 16px 112px" }}>
         <div className="eyebrow">12500 建築物室內設計 · 乙級</div>
         <h1>學科測驗模擬機</h1>
         <p className="lede">依技術士技能檢定學科參考資料建置題庫，模擬正式考試的隨機抽題、計分與及格判定。準備好就開始吧。</p>
@@ -37,7 +37,7 @@ function Home({ theme, setTheme, onStart, onResume, resume }) {
               <p>已作答 {Object.keys(resume.answers || {}).length} / {resume.ids.length} 題{resume.mode === 'formal' ? ` · 剩餘時間 ${fmtTime(resume.remaining)}` : ''}</p>
             </div>
             <button className="btn" onClick={() => {EXAM.clear();location.reload();}}>放棄</button>
-            <button className="btn btn-primary" onClick={onResume}>繼續 <Icon.arrow /></button>
+            <button className="btn btn-primary" onClick={onResume}>繼續</button>
           </div>
         }
 
@@ -74,6 +74,10 @@ function Home({ theme, setTheme, onStart, onResume, resume }) {
             <span className="mode-arrow"><Icon.arrow /></span>
           </button>
         </div>
+
+        <footer className="home-footer">
+          版權及免責聲明 © 2026 IMU Framework Ltd. 製作。題庫內容由勞動部勞動力發展署技能檢定中心提供，IMU Framework Ltd. 對題庫內容不承擔任何法律責任。
+        </footer>
       </div>
     </div>);
 

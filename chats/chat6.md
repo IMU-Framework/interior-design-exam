@@ -137,3 +137,47 @@ _[tool: read_file]_
 
 需要我把這份特色也排進縮圖的**第二版**（例如做一張以「三種模式」為主視覺的縮圖），或濃縮成更短的條列版嗎？
 
+## User
+
+請提供縮圖的深色版
+
+## Assistant
+
+I'll create a dark version as a tweakable toggle on the same file so you can switch between light and dark.
+
+_[tool: read_file]_
+
+I'll add a dark theme via a `.dark` class on the cover, plus a toggle button so you can preview both. The dark palette keeps the monochrome identity — near-black surface, white ink, same green "合格".
+
+_[tool: str_replace_edit]_
+
+Now the dark palette. I'll add it right before the closing `</style>`.
+
+_[tool: str_replace_edit]_
+
+_[tool: show_html]_
+
+_[tool: show_html]_
+
+The dark version looks great — monochrome inverted, brighter green "合格" for contrast. Let me export the dark PNG.
+
+_[tool: save_screenshot]_
+
+_[tool: run_script]_
+
+_[tool: view_image]_
+
+深色版完成了 — 維持 monochrome 反白風格，「合格」綠拉亮以保對比，正好 1280×640。
+
+兩個版本都在同一個檔案，可用左下按鈕切換預覽：
+
+- **深色 PNG**：`images/portaly-thumbnail-dark-1280x640.png`
+- **淺色 PNG**：`images/portaly-thumbnail-1280x640.png`
+- **HTML 編輯版**：`portaly-thumbnail.html`
+
+要我把深色版也做成下載卡，或調整綠色濃淡／卡片角度嗎？
+
+_[tool: present_fs_item_for_download]_
+
+深色版下載卡已提供（上方）。需要其他調整再跟我說。
+

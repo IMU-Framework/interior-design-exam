@@ -59,7 +59,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 /* ---------- App frame ---------- */
 #root { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
-.wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+.wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 16px; }
 
 /* ---------- Top bar ---------- */
 .topbar {
@@ -113,6 +113,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .section-label { display: flex; align-items: baseline; gap: 12px; margin: 46px 0 18px; }
 .section-label h2 { font-size: 15px; font-weight: 700; margin: 0; letter-spacing: .01em; }
 .section-label .hint { font-size: 13px; color: var(--faint); }
+.home-footer { margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 11px; line-height: 1.7; color: var(--faint); text-wrap: pretty; }
 
 .mode-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
 .mode-card {
@@ -138,7 +139,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .resume-banner p { margin: 4px 0 0; font-size: 13px; color: var(--muted); }
 
 /* ---------- Setup sheet ---------- */
-.setup { padding: 44px 0 80px; animation: fade .4s ease; max-width: 680px; }
+.setup { padding: 16px 16px 80px; animation: fade .4s ease; max-width: 680px; }
 .setup h1 { font-size: 28px; font-weight: 800; letter-spacing: -.02em; margin: 0 0 6px; }
 .setup .lede { color: var(--muted); margin: 0 0 30px; }
 .spec-table { border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; margin-bottom: 26px; }
@@ -218,7 +219,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .progress-mini { font-size: 13px; color: var(--muted); }
 .progress-mini b { color: var(--ink); }
 
-.exam-body { flex: 1; padding: 30px 0 140px; animation: fade .25s ease; }
+.exam-body { flex: 1; padding: 16px 16px 140px; animation: fade .25s ease; }
 .q-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
 .badge { font-size: 12px; font-weight: 600; white-space: nowrap; padding: 4px 11px; border-radius: 99px; background: var(--surface-2); color: var(--ink-soft); border: 1px solid var(--line); }
 .badge.multi { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
@@ -243,12 +244,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 /* real figures — always on white so CNS line symbols stay legible in both themes */
 .q-figure { margin: 6px 0 20px; }
 .q-figure img {
-  display: block; max-width: 360px; width: 100%; height: auto;
+  display: block; width: 180px; height: 180px; object-fit: contain;
   background: #fff; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 14px;
 }
 .opt-figure { display: inline-flex; }
 .opt-figure img {
-  display: block; max-height: 96px; max-width: 220px; width: auto; height: auto;
+  display: block; max-height: var(--opt-fig, 90px); max-width: 100%; width: auto; height: auto;
   background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 8px;
 }
 .option.has-figure { align-items: center; }
@@ -256,9 +257,17 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 /* inline figures & subscripts inside stem / option text */
 .inline-fig {
-  display: inline-block; vertical-align: middle; height: 30px; width: auto;
+  display: inline-block; vertical-align: middle; height: var(--opt-fig, 140px); width: auto; max-width: 100%;
   background: #fff; border: 1px solid var(--line); border-radius: 5px;
-  padding: 3px 5px; margin: 0 5px;
+  padding: 6px 8px; margin: 0 6px;
+}
+/* 選項文字中的內嵌圖（如電器符號） */
+.otext .inline-fig { height: 90px; padding: 10px; border-radius: var(--radius-sm); }
+/* 題幹內嵌圖：獨立一行、180px 見方等比顯示，與題幹圖一致 */
+.q-stem .inline-fig {
+  display: block; height: 180px; width: auto; max-width: 100%; object-fit: contain;
+  vertical-align: baseline; border-radius: var(--radius-sm);
+  padding: 14px; margin: 12px 0;
 }
 .inline-fig-missing {
   display: inline-block; vertical-align: middle; font-size: 12px; color: var(--warn);
@@ -423,7 +432,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .sk-spacer { flex: 1; }
 .sk-icon { width: 38px; height: 38px; border-radius: 10px; flex: none; }
 
-.sk-home { padding: 56px 0 80px; }
+.sk-home { padding: 16px 16px 80px; }
 .sk-stat-row { display: flex; flex-wrap: wrap; gap: 40px; margin-top: 34px; padding: 22px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .sk-stat { display: flex; flex-direction: column; gap: 9px; }
 .sk-section { display: flex; align-items: center; gap: 12px; margin: 46px 0 18px; }
@@ -441,7 +450,6 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .qgrid { grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); }
 }
 @media (max-width: 560px) {
-  .wrap { padding: 0 16px; }
   .score-cards { grid-template-columns: 1fr; }
   .brand-sub { display: none; }
   .filter-chips { margin-left: 0; width: 100%; }
@@ -450,7 +458,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   /* 手機版簡化：隱藏題號灰字與 header 進度統計 */
   .q-index { display: none; }
   .progress-mini { display: none; }
-  .exam-body { padding: 20px 0 calc(132px + env(safe-area-inset-bottom)); }
+  .exam-body { padding: 16px 16px calc(132px + env(safe-area-inset-bottom)); }
+  /* 入口頁：上左右 16px，下方預留不貼底 */
+  .home { padding: 16px 16px calc(112px + env(safe-area-inset-bottom)); }
+  /* 繼續橫幅：文字收窄、不換行，按鈕保持同一列 */
+  .resume-banner { flex-wrap: nowrap; }
+  .resume-banner .info { min-width: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
