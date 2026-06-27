@@ -241,7 +241,9 @@ function ReviewItem({
     className: 'rev-tag ' + (correct ? 'ok' : 'bad')
   }, correct ? '✓ 答對' : '✗ 答錯')), /*#__PURE__*/React.createElement("p", {
     className: "rev-stem"
-  }, q.stem), q.img && /*#__PURE__*/React.createElement(StemImage, {
+  }, /*#__PURE__*/React.createElement(RichText, {
+    text: q.stem
+  })), q.img && /*#__PURE__*/React.createElement(StemImage, {
     q: q
   }), /*#__PURE__*/React.createElement("div", {
     className: "rev-opts"
@@ -263,7 +265,9 @@ function ReviewItem({
     }, isOptionImageQ(q) ? /*#__PURE__*/React.createElement(OptionImage, {
       q: q,
       n: n
-    }) : t), isAns && /*#__PURE__*/React.createElement("span", {
+    }) : /*#__PURE__*/React.createElement(RichText, {
+      text: t
+    })), isAns && /*#__PURE__*/React.createElement("span", {
       className: "rev-tag ok"
     }, "\u6B63\u89E3"), picked && !isAns && /*#__PURE__*/React.createElement("span", {
       className: "rev-tag bad"

@@ -139,7 +139,7 @@ function ReviewItem({ q, i, singleCount, mine, flagged }) {
         {flagged && <span className="flag-btn on" style={{ pointerEvents: 'none' }}><Icon.flag />標記</span>}
         <span className={'rev-tag ' + (correct ? 'ok' : 'bad')}>{correct ? '✓ 答對' : '✗ 答錯'}</span>
       </div>
-      <p className="rev-stem">{q.stem}</p>
+      <p className="rev-stem"><RichText text={q.stem} /></p>
       {q.img && <StemImage q={q} />}
       <div className="rev-opts">
         {q.opts.map((t, j) => {
@@ -152,7 +152,7 @@ function ReviewItem({ q, i, singleCount, mine, flagged }) {
           return (
             <div className={cls} key={j}>
               <span className="rm">{CIRC[j]}</span>
-              <span style={{ flex: 1 }}>{isOptionImageQ(q) ? <OptionImage q={q} n={n} /> : t}</span>
+              <span style={{ flex: 1 }}>{isOptionImageQ(q) ? <OptionImage q={q} n={n} /> : <RichText text={t} />}</span>
               {isAns && <span className="rev-tag ok">正解</span>}
               {picked && !isAns && <span className="rev-tag bad">你選</span>}
               {picked && isAns && <span className="rev-tag ok" style={{ color: 'var(--ok)' }}>你選 ✓</span>}

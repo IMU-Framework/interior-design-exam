@@ -52,7 +52,9 @@ function Option({
   }, optImg ? /*#__PURE__*/React.createElement(OptionImage, {
     q: q,
     n: n
-  }) : text));
+  }) : /*#__PURE__*/React.createElement(RichText, {
+    text: text
+  })));
 }
 function ExamScreen({
   exam,
@@ -176,7 +178,9 @@ function ExamScreen({
     className: "q-index mono"
   }, String(idx + 1).padStart(2, '0'), " / ", total)), /*#__PURE__*/React.createElement("p", {
     className: "q-stem"
-  }, q.stem), q.img && /*#__PURE__*/React.createElement(StemImage, {
+  }, /*#__PURE__*/React.createElement(RichText, {
+    text: q.stem
+  })), q.img && /*#__PURE__*/React.createElement(StemImage, {
     q: q
   }), q.type === 'multi' ? /*#__PURE__*/React.createElement("p", {
     className: "multi-note"
@@ -252,6 +256,8 @@ function ExamScreen({
     idx: idx,
     singleCount: singleCount,
     mode: mode,
+    answeredCount: answeredCount,
+    seenCount: seenCount,
     onJump: jump,
     onClose: () => setPaletteOpen(false),
     onSubmit: () => {
@@ -275,6 +281,8 @@ function Palette({
   idx,
   singleCount,
   mode,
+  answeredCount,
+  seenCount,
   onJump,
   onClose,
   onSubmit
@@ -304,7 +312,9 @@ function Palette({
     onClick: e => e.stopPropagation()
   }, /*#__PURE__*/React.createElement("div", {
     className: "drawer-head"
-  }, /*#__PURE__*/React.createElement("h3", null, "\u984C\u865F\u9762\u677F"), /*#__PURE__*/React.createElement("button", {
+  }, /*#__PURE__*/React.createElement("h3", null, "\u984C\u865F\u9762\u677F", /*#__PURE__*/React.createElement("span", {
+    className: "palette-prog"
+  }, mode === 'study' ? /*#__PURE__*/React.createElement(React.Fragment, null, "\u5DF2\u7DF4 ", seenCount, " / ", qs.length) : /*#__PURE__*/React.createElement(React.Fragment, null, "\u5DF2\u7B54 ", answeredCount, " / ", qs.length))), /*#__PURE__*/React.createElement("button", {
     className: "icon-btn",
     onClick: onClose
   }, /*#__PURE__*/React.createElement(Icon.close, null))), /*#__PURE__*/React.createElement("div", {

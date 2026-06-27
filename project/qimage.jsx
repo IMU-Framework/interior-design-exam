@@ -10,10 +10,38 @@ function isOptionImageQ(q) {
   return q.img && Array.isArray(q.opts) && q.opts.every(o => !o);
 }
 
+// 行內標記：[[img:ID]] → 行內小圖（images/ID.png）；[[sub:X]] → 下標文字
+const RICH_RE = /\[\[(img|sub):([^\]]+)\]\]/g;
+function hasInlineImg(text) { return typeof text === 'string' && /\[\[img:/.test(text); }
+
+function InlineFig({ id }) {
+  const [failed, setFailed] = React.useState(false);
+  if (failed) return <span className="inline-fig-missing mono">[圖待補 {id}]</span>;
+  return <img className="inline-fig" src={'images/' + id + '.png'} alt={id} onError={() => setFailed(true)} />;
+}
+
+function RichText({ text }) {
+  if (text == null) return null;
+  const s = String(text);
+  if (!RICH_RE.test(s)) return s;
+  RICH_RE.lastIndex = 0;
+  const out = [];
+  let last = 0, m, k = 0;
+  while ((m = RICH_RE.exec(s))) {
+    if (m.index > last) out.push(s.slice(last, m.index));
+    if (m[1] === 'img') out.push(<InlineFig key={k++} id={m[2]} />);
+    else out.push(<sub key={k++} className="inline-sub">{m[2]}</sub>);
+    last = RICH_RE.lastIndex;
+  }
+  if (last < s.length) out.push(s.slice(last));
+  return <>{out}</>;
+}
+
 // 題幹圖：嘗試載入 images/{id}.png，失敗則顯示 placeholder
 function StemImage({ q }) {
   const [failed, setFailed] = React.useState(false);
   if (isOptionImageQ(q)) return null; // 選項圖題不畫題幹圖
+  if (hasInlineImg(q.stem)) return null; // 圖已內嵌於題幹文字中
   if (failed) {
     return (
       <div className="img-placeholder">
@@ -45,4 +73,4 @@ function OptionImage({ q, n }) {
   );
 }
 
-Object.assign(window, { isOptionImageQ, StemImage, OptionImage });
+Object.assign(window, { isOptionImageQ, StemImage, OptionImage, RichText, InlineFig, hasInlineImg });

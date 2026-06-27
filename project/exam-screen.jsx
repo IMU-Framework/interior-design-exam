@@ -28,7 +28,7 @@ function Option({ idx, text, q, selected, revealed, onClick }) {
     <button className={cls + (optImg ? ' has-figure' : '')} disabled={revealed} onClick={onClick}>
       <span className="marker">{mark}</span>
       <span className="otext">
-        {optImg ? <OptionImage q={q} n={n} /> : text}
+        {optImg ? <OptionImage q={q} n={n} /> : <RichText text={text} />}
       </span>
     </button>
   );
@@ -104,7 +104,7 @@ function ExamScreen({ exam, remaining, theme, setTheme, setAnswer, toggleFlag, r
           <span className="q-index mono">{String(idx + 1).padStart(2, '0')} / {total}</span>
         </div>
 
-        <p className="q-stem">{q.stem}</p>
+        <p className="q-stem"><RichText text={q.stem} /></p>
         {q.img && <StemImage q={q} />}
         {q.type === 'multi'
           ? <p className="multi-note">複選題 · 須全部選對才算正確{mode === 'formal' ? '（得 2 分；多選、漏選、錯選皆 0 分）' : '（多選、漏選、錯選皆算錯）'}</p>
@@ -145,6 +145,7 @@ function ExamScreen({ exam, remaining, theme, setTheme, setAnswer, toggleFlag, r
 
       {paletteOpen && (
         <Palette qs={qs} ids={ids} answers={answers} flags={flags} idx={idx} singleCount={singleCount} mode={mode}
+          answeredCount={answeredCount} seenCount={seenCount}
           onJump={jump} onClose={() => setPaletteOpen(false)} onSubmit={() => { setPaletteOpen(false); setConfirmOpen(true); }} />
       )}
 
@@ -156,7 +157,7 @@ function ExamScreen({ exam, remaining, theme, setTheme, setAnswer, toggleFlag, r
   );
 }
 
-function Palette({ qs, ids, answers, flags, idx, singleCount, mode, onJump, onClose, onSubmit }) {
+function Palette({ qs, ids, answers, flags, idx, singleCount, mode, answeredCount, seenCount, onJump, onClose, onSubmit }) {
   const cell = (i) => {
     const id = ids[i];
     const answered = answers[id] && answers[id].length;
@@ -173,7 +174,7 @@ function Palette({ qs, ids, answers, flags, idx, singleCount, mode, onJump, onCl
     <div className="drawer-mask" onClick={onClose}>
       <div className="drawer" onClick={e => e.stopPropagation()}>
         <div className="drawer-head">
-          <h3>題號面板</h3>
+          <h3>題號面板<span className="palette-prog">{mode === 'study' ? <>已練 {seenCount} / {qs.length}</> : <>已答 {answeredCount} / {qs.length}</>}</span></h3>
           <button className="icon-btn" onClick={onClose}><Icon.close /></button>
         </div>
         <div className="legend">
