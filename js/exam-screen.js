@@ -162,10 +162,7 @@ function ExamScreen({
     },
     onClick: () => setConfirmOpen(true)
   }, submitLabel))), /*#__PURE__*/React.createElement("div", {
-    className: "wrap exam-body",
-    style: {
-      padding: "16px 16px 132px"
-    }
+    className: "wrap exam-body"
   }, /*#__PURE__*/React.createElement("div", {
     className: "q-head"
   }, /*#__PURE__*/React.createElement("span", {

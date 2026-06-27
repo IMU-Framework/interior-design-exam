@@ -25,10 +25,7 @@ function Home({
     theme: theme,
     setTheme: setTheme
   }))), /*#__PURE__*/React.createElement("div", {
-    className: "wrap home",
-    style: {
-      padding: "16px 16px 112px"
-    }
+    className: "wrap home"
   }, /*#__PURE__*/React.createElement("div", {
     className: "eyebrow"
   }, "12500 \u5EFA\u7BC9\u7269\u5BA4\u5167\u8A2D\u8A08 \xB7 \u4E59\u7D1A"), /*#__PURE__*/React.createElement("h1", null, "\u5B78\u79D1\u6E2C\u9A57\u6A21\u64EC\u6A5F"), /*#__PURE__*/React.createElement("p", {

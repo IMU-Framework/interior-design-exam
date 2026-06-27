@@ -18,7 +18,7 @@ function Home({ theme, setTheme, onStart, onResume, resume }) {
         </div>
       </div>
 
-      <div className="wrap home" style={{ padding: "16px 16px 112px" }}>
+      <div className="wrap home">
         <div className="eyebrow">12500 建築物室內設計 · 乙級</div>
         <h1>學科測驗模擬機</h1>
         <p className="lede">依技術士技能檢定學科參考資料建置題庫，模擬正式考試的隨機抽題、計分與及格判定。準備好就開始吧。</p>
