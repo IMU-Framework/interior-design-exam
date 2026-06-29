@@ -1,0 +1,23 @@
+node_modules/
+.ds-sync/
+ds-bundle/_ds_needs_recompile
+
+# Root-level copies of project/ files (local dev convenience only)
+/admin.css
+/admin.html
+/admin.jsx
+/app.jsx
+/exam-core.js
+/exam-screen.jsx
+/home.jsx
+/icons.jsx
+/image-checklist.html
+/portaly-thumbnail.html
+/practice.jsx
+/qimage.jsx
+/result.jsx
+/styles.css
+/suspect-list.html
+/data/
+/images/
+/uploads/

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>乙級技術士學科測驗模擬機 · 建築物室內設計</title>
+  <link rel="stylesheet" href="project/styles.css?v=24" />
+  <style>
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #loading-ring {
+      position: fixed; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg, #fff);
+    }
+    #loading-ring::after {
+      content: '';
+      width: 40px; height: 40px;
+      border: 3px solid var(--line, #e5e5e5);
+      border-top-color: var(--ink, #111);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+  </style>
+  <script>
+    // set theme before paint to avoid flash
+    (function () {
+      try {
+        var t = localStorage.getItem('ylab_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+    // base path for question images (project/images/ relative to this root index.html)
+    window.IMG_ROOT = 'project/images/';
+  </script>
+</head>
+<body>
+  <div id="root"><div id="loading-ring"></div></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+
+  <!-- Load question bank from per-subject JSON files, then boot core + UI -->
+  <script>
+    (async function bootExam() {
+      var CODES = ['12500', '90006', '90007', '90008', '90009'];
+      try {
+        var parts = await Promise.all(CODES.map(function (c) {
+          return fetch('project/data/bank-' + c + '.json').then(function (r) {
+            if (!r.ok) throw new Error('bank-' + c + '.json ' + r.status);
+            return r.json();
+          });
+        }));
+        var bank = parts.flat();
+        // Apply admin draft overrides (localStorage) if present
+        try {
+          var draft = JSON.parse(localStorage.getItem('ylab_admin_draft_v1') || '{}');
+          if (draft && typeof draft === 'object') {
+            bank = bank.map(function (q) {
+              var d = draft[q.id];
+              return d ? Object.assign({}, q, d) : q;
+            });
+          }
+        } catch (e) {}
+        window.QUESTION_BANK = bank;
+      } catch (e) {
+        document.getElementById('root').innerHTML =
+          '<div style="max-width:560px;margin:80px auto;font-family:sans-serif;line-height:1.7;color:#b4651b">'
+          + '<h2>題庫載入失敗</h2><p>無法讀取題庫 JSON：<code>' + e.message + '</code></p>'
+          + '<p>請透過預覽伺服器開啟本頁（直接以 file:// 開啟會被瀏覽器阻擋 fetch）。</p></div>';
+        return;
+      }
+
+      function loadScript(src) {
+        return new Promise(function (res, rej) {
+          var s = document.createElement('script');
+          s.src = src; s.onload = res; s.onerror = rej;
+          document.body.appendChild(s);
+        });
+      }
+
+      // core logic (plain JS) — reads window.QUESTION_BANK
+      await loadScript('project/exam-core.js');
+
+      // pre-compiled UI scripts (no Babel needed)
+      var scripts = [
+        'js/icons.js',
+        'js/qimage.js',
+        'js/home.js',
+        'js/practice.js',
+        'js/exam-screen.js',
+        'js/result.js',
+        'js/app.js',
+      ];
+      for (var i = 0; i < scripts.length; i++) {
+        await loadScript(scripts[i]);
+      }
+    })();
+  </script>
+</body>
+</html>

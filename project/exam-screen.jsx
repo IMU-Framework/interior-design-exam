@@ -94,7 +94,7 @@ function ExamScreen({ exam, remaining, theme, setTheme, setAnswer, toggleFlag, r
         </div>
       </div>
 
-      <div className="wrap exam-body" style={{ padding: "16px 16px 132px" }}>
+      <div className="wrap exam-body">
         <div className="q-head">
           <span className="badge">{catLabel(q)}</span>
           <span className={'badge ' + (q.type === 'multi' ? 'multi' : '')}>{q.type === 'multi' ? '複選' : '單選'}</span>

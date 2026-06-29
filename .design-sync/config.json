@@ -1,0 +1,23 @@
+{
+  "pkg": "repo",
+  "shape": "package",
+  "entry": "project/ds-entry.jsx",
+  "srcDir": "project",
+  "cssEntry": "project/styles.css",
+  "globalName": "InteriorDesignExam",
+  "componentSrcMap": {
+    "SunIcon": "project/ds-entry.jsx",
+    "MoonIcon": "project/ds-entry.jsx",
+    "ArrowIcon": "project/ds-entry.jsx",
+    "BackIcon": "project/ds-entry.jsx",
+    "ClockIcon": "project/ds-entry.jsx",
+    "FlagIcon": "project/ds-entry.jsx",
+    "GridIcon": "project/ds-entry.jsx",
+    "CloseIcon": "project/ds-entry.jsx",
+    "ImageIcon": "project/ds-entry.jsx",
+    "CheckIcon": "project/ds-entry.jsx",
+    "XIcon": "project/ds-entry.jsx",
+    "Switch": "project/ds-entry.jsx",
+    "ThemeToggle": "project/ds-entry.jsx"
+  }
+}
