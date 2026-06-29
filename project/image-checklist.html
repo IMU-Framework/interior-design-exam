@@ -1,0 +1,480 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>補圖清單 · 待補圖檔對照表</title>
+<style>
+  :root{--ink:#1c1b19;--soft:#5f5b54;--faint:#a8a39a;--line:#e6e2da;--bg:#f6f4ef;--warn:#b4651b;--ok:#3f7d4e;}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"Noto Sans TC","PingFang TC",sans-serif;line-height:1.6;}
+  .wrap{max-width:980px;margin:0 auto;padding:40px 28px 80px;}
+  header h1{font-size:26px;margin:0 0 6px;}
+  header p{color:var(--soft);margin:4px 0;}
+  .legend{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin:22px 0 8px;}
+  .legend code{background:var(--bg);padding:1px 6px;border-radius:5px;font-size:13px;}
+  h2{font-size:16px;margin:34px 0 12px;padding-top:14px;border-top:2px solid var(--ink);}
+  h2 .cnt{font-size:13px;color:var(--soft);font-weight:500;}
+  .item{display:flex;gap:20px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:12px;}
+  .item .meta{flex:1;min-width:0;}
+  .num{font-size:13px;color:var(--soft);}
+  .num b{color:var(--ink);}
+  .kind{display:inline-block;font-size:12px;font-weight:600;color:var(--warn);border:1px solid var(--warn);border-radius:99px;padding:2px 10px;margin:6px 0;}
+  .item.optimg .kind{color:var(--ok);border-color:var(--ok);}
+  .stem{margin:6px 0;font-size:15px;}
+  .opts{margin:6px 0 0;padding-left:2px;list-style:none;color:var(--soft);font-size:13px;}
+  .opts li{margin:2px 0;}
+  .slots{display:flex;flex-wrap:wrap;gap:10px;flex:none;width:230px;justify-content:flex-end;}
+  .item.optimg .slots{width:230px;}
+  .slot{position:relative;width:104px;text-align:center;}
+  .slot img{display:block;width:104px;height:104px;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:8px;}
+  .slot code{display:block;font-size:10px;color:var(--faint);margin-top:3px;word-break:break-all;}
+  .miss-tag{display:none;position:absolute;top:38px;left:0;right:0;font-size:12px;color:var(--faint);}
+  .slot.miss img{visibility:hidden;}
+  .slot.miss{background:repeating-linear-gradient(135deg,#faf8f4 0 8px,#f1eee8 8px 16px);border:1px dashed var(--faint);border-radius:8px;height:104px;}
+  .slot.miss .miss-tag{display:block;}
+  /* collapsible groups */
+  h2{cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px;}
+  h2::before{content:"";width:8px;height:8px;border-top:2px solid var(--ink);border-right:2px solid var(--ink);transform:rotate(135deg);transition:transform .15s;flex:none;margin-top:-2px;}
+  h2.collapsed::before{transform:rotate(45deg);}
+  h2 .cnt{margin-left:auto;}
+  .item.hidden{display:none;}
+  /* scroll to top */
+  #toTop{position:fixed;right:24px;bottom:24px;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);
+    background:#fff;color:var(--ink);font-size:20px;line-height:1;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.12);
+    display:none;align-items:center;justify-content:center;z-index:50;}
+  #toTop.show{display:flex;}
+  #toTop:hover{background:var(--bg);}
+  #toTop .chev{width:13px;height:13px;border-top:2.5px solid var(--ink);border-right:2.5px solid var(--ink);transform:rotate(-45deg);margin-top:4px;}
+</style><link id="gfont-Noto-Sans" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&amp;display=swap">
+</head><body style="font-family: &quot;Noto Sans&quot;; background-color: rgb(246, 244, 239)"><div class="wrap">
+<header>
+  <h1>圖檔對照表</h1>
+  <p>全題庫共 <b>1149</b> 題，其中 <b>48</b> 題含圖。</p>
+  <p>需準備圖檔總數：<b>75</b> 張。</p>
+</header>
+<div class="legend" style="font-size: 12px; background-color: rgb(255, 255, 255)">
+  <h3 style="margin:0 0 8px;font-size:14px">補圖說明</h3>
+  <p style="margin-top: 0; margin: 3px 0px 0px"><b>上傳位置：</b>把圖檔放進 <code>images/</code> 資料夾，<b>檔名一定要和下方標示完全一致</b>，放進去後本頁重新整理就會顯示縮圖。</p>
+  <p style="margin: 3px 0px 0px"><b>命名規則：</b>題幹圖 = <code>{原始題號}.png</code>；選項圖 = <code>{原始題號}-1.png</code> ~ <code>-4.png</code>。</p>
+  <p style="margin-bottom: 0; margin: 3px 0px 0px"><b>圖檔尺寸：</b>題幹圖寬 320–640px、選項圖 約 400×400px，PNG 去背或白底，單檔 &lt; 100KB。</p>
+</div>
+<h2>專業科目 12500 建築物室內設計 · 工作項目 01　<span class="cnt">44 題</span></h2><div class="item optimg">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 3 題</b></div>
+        <div class="kind">選項圖 ×4</div>
+        <p class="stem">依 CNS 國家標準規定，下列何者為偵煙型火警探測器</p>
+        
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-3-1.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-3-1.png</code></div><div class="slot"><img src="images/12500-01-3-2.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-3-2.png</code></div><div class="slot"><img src="images/12500-01-3-3.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-3-3.png</code></div><div class="slot"><img src="images/12500-01-3-4.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-3-4.png</code></div></div>
+    </div><div class="item optimg">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 4 題</b></div>
+        <div class="kind">選項圖 ×4</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，下列何者為定溫型火警探測器</p>
+        
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-4-1.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-4-1.png</code></div><div class="slot"><img src="images/12500-01-4-2.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-4-2.png</code></div><div class="slot"><img src="images/12500-01-4-3.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-4-3.png</code></div><div class="slot"><img src="images/12500-01-4-4.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-4-4.png</code></div></div>
+    </div><div class="item optimg">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 5 題</b></div>
+        <div class="kind">選項圖 ×4</div>
+        <p class="stem">依 CNS 國家標準規定，下列何者為差動型火警探測器</p>
+        
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-5-1.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-5-1.png</code></div><div class="slot"><img src="images/12500-01-5-2.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-5-2.png</code></div><div class="slot"><img src="images/12500-01-5-3.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-5-3.png</code></div><div class="slot"><img src="images/12500-01-5-4.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-5-4.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 6 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，消防設備圖代表</p>
+        <ul class="opts"><li>① 火警警報總機</li><li>② 排煙受信總機</li><li>③ 自動撒水受信總機</li><li>④ 火警受信總機</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-6.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-6.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 7 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，給排水及衛生設備圖例代表</p>
+        <ul class="opts"><li>① 冷水管</li><li>② 熱水管</li><li>③ 熱水回水管</li><li>④ 空氣管</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-7.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-7.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 8 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，空調及機械設備如下圖表示</p>
+        <ul class="opts"><li>① 回風管</li><li>② 消音式風管</li><li>③ 風管下彎</li><li>④ 負壓風管</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-8.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-8.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 9 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，消防設備圖中代表</p>
+        <ul class="opts"><li>① 警報發信器</li><li>② 揚聲器</li><li>③ 報警標示燈</li><li>④ 火警警鈴</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-9.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-9.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 11 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，電氣設備圖中代表</p>
+        <ul class="opts"><li>① 泡沫自動撒水頭</li><li>② 揚聲器</li><li>③ 緊急照明燈</li><li>④ 壁式出口標示燈</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-11.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-11.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 12 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，電氣設備圖例代表</p>
+        <ul class="opts"><li>① 發電機</li><li>② 電動機</li><li>③ 電熱機</li><li>④ 電風扇</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-12.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-12.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 14 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，給排水及衛生設備圖例代表</p>
+        <ul class="opts"><li>① 排水管</li><li>② 通氣管</li><li>③ 雨水排水管</li><li>④ 冷水管</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-14.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-14.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 15 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，給排水及衛生設備圖例代表</p>
+        <ul class="opts"><li>① 排水管</li><li>② 通氣管</li><li>③ 雨水排水管</li><li>④ 冷水管</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-15.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-15.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 16 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，給排水及衛生設備符號表示</p>
+        <ul class="opts"><li>① 閘閥</li><li>② 逆止閥</li><li>③ 過濾器</li><li>④ 控制閥</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-16.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-16.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 17 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，空調及機械設備符號表示</p>
+        <ul class="opts"><li>① 回風管</li><li>② 消音式風管</li><li>③ 風管上彎</li><li>④ 負壓風管</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-17.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-17.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 19 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，給排水及衛生設備符號表示</p>
+        <ul class="opts"><li>① 地板下清潔口</li><li>② 真空吸氣管</li><li>③ 瓦斯管</li><li>④ 氧氣管</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-19.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-19.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 20 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，電氣設備符號表示</p>
+        <ul class="opts"><li>① 瓦斯表</li><li>② 電動機</li><li>③ 發電機</li><li>④ 電熱器</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-20.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-20.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 21 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，消防設備符號表示</p>
+        <ul class="opts"><li>① 消防栓箱</li><li>② 火警受信總機</li><li>③ 綜合盤</li><li>④ 消防水帶箱</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-21.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-21.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 22 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，給排水及衛生設備符號表示</p>
+        <ul class="opts"><li>① 球型閥</li><li>② 過濾器</li><li>③ 控制閥</li><li>④ 逆止閥</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-22.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-22.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 24 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，電氣設備圖說，依序代表</p>
+        <ul class="opts"><li>① 電燈、電力總配電盤</li><li>② 電力、電燈總配電盤</li><li>③ 電燈、電力分電盤</li><li>④ 電力、電燈分電盤</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-24.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-24.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 25 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，消防設備符號，如下圖代表</p>
+        <ul class="opts"><li>① 出水口</li><li>② 消防送水口</li><li>③ 滅火器</li><li>④ 屋頂消防栓</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-25.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-25.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 27 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，材料及構造圖說〔圖〕其代表</p>
+        <ul class="opts"><li>① 磚牆</li><li>② 石材</li><li>③ 裝修材</li><li>④ 保溫吸音材</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-27.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-27.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 31 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，〔圖〕，依序代表</p>
+        <ul class="opts"><li>① 電燈分電盤、單連插座、接線盒及出線口</li><li>② 電燈總配電盤、雙連插座、接線盒</li><li>③ 電燈分電盤、雙連插座、接線盒及出線口</li><li>④ 電燈總配電盤、單連插座、接線盒</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-31.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-31.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 32 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，在建築平面圖說中之門窗符號表示</p>
+        <ul class="opts"><li>① 雙開窗</li><li>② 雙開門</li><li>③ 雙向門</li><li>④ 雙拉窗</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-32.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-32.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 33 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，此符號在平面圖中代表</p>
+        <ul class="opts"><li>① 橫拉窗</li><li>② 上下拉窗</li><li>③ 雙拉門</li><li>④ 折疊門</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-33.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-33.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 34 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，材料、構造圖例表示</p>
+        <ul class="opts"><li>① 地面</li><li>② 卵石</li><li>③ 級配</li><li>④ 粉刷類</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-34.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-34.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 35 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，材料、構造圖例表示</p>
+        <ul class="opts"><li>① 地盤</li><li>② 卵石</li><li>③ 級配</li><li>④ 粉刷類</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-35.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-35.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 36 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，電氣設備圖說，代表</p>
+        <ul class="opts"><li>① 接地型雙連插座</li><li>② 雙連插座</li><li>③ 單連插座</li><li>④ 接地專用單連插座</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-36.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-36.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 37 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，電氣設備圖說，代表</p>
+        <ul class="opts"><li>① 電力分電盤</li><li>② 電燈總配電盤</li><li>③ 電燈動力混合配電盤</li><li>④ 電燈分電盤</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-37.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-37.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 39 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，在給排水及衛生設備符號如下圖代表</p>
+        <ul class="opts"><li>① 屋頂排水口</li><li>② 地板面清潔口</li><li>③ 地板下清潔口</li><li>④ 地板落水口</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-39.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-39.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 41 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，在空調符號之圖說，代表</p>
+        <ul class="opts"><li>① 回風口</li><li>② 牆上出風口</li><li>③ 地上出風口</li><li>④ 平頂出風口</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-41.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-41.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 42 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，在空調符號之圖說，代表</p>
+        <ul class="opts"><li>① 電動閘門</li><li>② 防火閘門</li><li>③ 分岐閘門</li><li>④ 手動閘門</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-42.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-42.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 43 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，消防設備符號代表</p>
+        <ul class="opts"><li>① 綜合盤</li><li>② 火警受信總機</li><li>③ 自動撒水受信總機</li><li>④ 消防栓箱</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-43.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-43.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 45 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，材料、構造圖例代表</p>
+        <ul class="opts"><li>① 磚</li><li>② 裝修材</li><li>③ 石材</li><li>④ 鬆軟保溫吸音材疊蓆類</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-45.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-45.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 46 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，〔圖〕圖例中所標示的"2"是代表</p>
+        <ul class="opts"><li>① 標準圖</li><li>② 詳圖的編號</li><li>③ 設備圖</li><li>④ 門窗號碼</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-46.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-46.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 48 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依 CNS 國家標準規定，電氣設備圖說，如下圖依序代表</p>
+        <ul class="opts"><li>① 單連插座及雙連插座</li><li>② 專用雙插座及單插座</li><li>③ 單連及雙連接地型插座</li><li>④ 專用接地單插座及雙插座</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-48.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-48.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 49 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，電氣設備圖例，代表</p>
+        <ul class="opts"><li>① 電燈分電盤</li><li>② 電力總電盤</li><li>③ 電力分電盤</li><li>④ 電燈總電盤</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-49.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-49.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 51 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依 CNS 國家標準規定，空調及機械設備圖說，如下圖代表</p>
+        <ul class="opts"><li>① 牆上出風口</li><li>② 檢修口</li><li>③ 平頂出風口</li><li>④ 平頂回風口</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-51.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-51.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 52 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，空調及機械設備如下圖代表</p>
+        <ul class="opts"><li>① 防水閘門</li><li>② 電動閘門</li><li>③ 分歧閘門</li><li>④ 手動閘門</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-52.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-52.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 53 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，消防設備符號代表</p>
+        <ul class="opts"><li>① 水霧自動撒水頭</li><li>② 泡沫自動撒水頭</li><li>③ 自動撒水頭</li><li>④ 自動撒水送水口</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-53.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-53.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 54 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，消防設備符號代表</p>
+        <ul class="opts"><li>① 排煙設備排煙口</li><li>② 消防出水口</li><li>③ 消防送水口</li><li>④ 排煙設備進風口</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-54.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-54.png</code></div></div>
+    </div><div class="item optimg">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 92 題</b></div>
+        <div class="kind">選項圖 ×4</div>
+        <p class="stem">依中華民國國家標準 CNS 建築製圖規定，下列對「電氣設備符號」哪些為正確？</p>
+        <ul class="opts"><li>① 〔圖〕單極開關</li><li>② 〔圖〕電力總配線盤</li><li>③ 〔圖〕電燈總配線盤</li><li>④ 〔圖〕接地型單連插座</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-92-1.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-92-1.png</code></div><div class="slot"><img src="images/12500-01-92-2.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-92-2.png</code></div><div class="slot"><img src="images/12500-01-92-3.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-92-3.png</code></div><div class="slot"><img src="images/12500-01-92-4.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-92-4.png</code></div></div>
+    </div><div class="item optimg">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 93 題</b></div>
+        <div class="kind">選項圖 ×4</div>
+        <p class="stem">(本題刪題)依中華民國國家標準 CNS 建築製圖規定，下列對「電器設備符號」哪些為正確？</p>
+        <ul class="opts"><li>① 〔圖〕吸頂白熾燈</li><li>② 〔圖〕嵌頂白熾燈</li><li>③ 〔圖〕壁式白熾燈</li><li>④ 〔圖〕吊頂白熾燈</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-93-1.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-93-1.png</code></div><div class="slot"><img src="images/12500-01-93-2.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-93-2.png</code></div><div class="slot"><img src="images/12500-01-93-3.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-93-3.png</code></div><div class="slot"><img src="images/12500-01-93-4.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-93-4.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 94 題</b></div>
+        <div class="kind">選項圖 ×1</div>
+        <p class="stem">依中華民國國家標準 CNS 建築製圖規定，下列對「給排水及衛生設備符號」哪些為正確？</p>
+        <ul class="opts"><li>① 〔圖〕熱水管</li><li>② ─ S─ 瓦斯管</li><li>③ ─ D─ 排水管</li><li>④ ─ SW─ 排污管</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-94-1.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-94-1.png</code></div></div>
+    </div><div class="item optimg">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 95 題</b></div>
+        <div class="kind">選項圖 ×4</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，下列哪些屬於電氣設備之分電盤符號？</p>
+        
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-95-1.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-95-1.png</code></div><div class="slot"><img src="images/12500-01-95-2.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-95-2.png</code></div><div class="slot"><img src="images/12500-01-95-3.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-95-3.png</code></div><div class="slot"><img src="images/12500-01-95-4.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-95-4.png</code></div></div>
+    </div><div class="item optimg">
+      <div class="meta">
+        <div class="num">原始題號 <b>12500 · 工作項目01 · 第 96 題</b></div>
+        <div class="kind">選項圖 ×4</div>
+        <p class="stem">依中華民國國家標準 CNS 規定，下列哪些屬於電氣設備之配電盤符號？</p>
+        
+      </div>
+      <div class="slots"><div class="slot"><img src="images/12500-01-96-1.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-96-1.png</code></div><div class="slot"><img src="images/12500-01-96-2.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-96-2.png</code></div><div class="slot"><img src="images/12500-01-96-3.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-96-3.png</code></div><div class="slot"><img src="images/12500-01-96-4.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>12500-01-96-4.png</code></div></div>
+    </div><h2>共同科目 環境保護 · 工作項目 03　<span class="cnt">1 題</span></h2><div class="item optimg">
+      <div class="meta">
+        <div class="num">原始題號 <b>90008 · 工作項目03 · 第 13 題</b></div>
+        <div class="kind">選項圖 ×4</div>
+        <p class="stem">下列何者為環保標章？</p>
+        
+      </div>
+      <div class="slots"><div class="slot"><img src="images/90008-03-13-1.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>90008-03-13-1.png</code></div><div class="slot"><img src="images/90008-03-13-2.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>90008-03-13-2.png</code></div><div class="slot"><img src="images/90008-03-13-3.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>90008-03-13-3.png</code></div><div class="slot"><img src="images/90008-03-13-4.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>90008-03-13-4.png</code></div></div>
+    </div><h2>共同科目 節能減碳 · 工作項目 04　<span class="cnt">3 題</span></h2><div class="item optimg">
+      <div class="meta">
+        <div class="num">原始題號 <b>90009 · 工作項目04 · 第 2 題</b></div>
+        <div class="kind">選項圖 ×4</div>
+        <p class="stem">下列何者為節能標章？</p>
+        
+      </div>
+      <div class="slots"><div class="slot"><img src="images/90009-04-2-1.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>90009-04-2-1.png</code></div><div class="slot"><img src="images/90009-04-2-2.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>90009-04-2-2.png</code></div><div class="slot"><img src="images/90009-04-2-3.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>90009-04-2-3.png</code></div><div class="slot"><img src="images/90009-04-2-4.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>90009-04-2-4.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>90009 · 工作項目04 · 第 69 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">如下圖示為</p>
+        <ul class="opts"><li>① 省水標章</li><li>② 環保標章</li><li>③ 奈米標章</li><li>④ 能源效率標示</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/90009-04-69.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>90009-04-69.png</code></div></div>
+    </div><div class="item ">
+      <div class="meta">
+        <div class="num">原始題號 <b>90009 · 工作項目04 · 第 86 題</b></div>
+        <div class="kind">題幹圖 ×1</div>
+        <p class="stem">如下圖，這是什麼標章？</p>
+        <ul class="opts"><li>① 奈米標章</li><li>② 環保標章</li><li>③ 省水標章</li><li>④ 節能標章</li></ul>
+      </div>
+      <div class="slots"><div class="slot"><img src="images/90009-04-86.png" alt="" onerror="this.parentNode.classList.add('miss')"/><span class="miss-tag">未上傳</span><code>90009-04-86.png</code></div></div>
+    </div>
+</div>
+<button id="toTop" title="回到頂端" aria-label="回到頂端"><span class="chev"></span></button>
+<script>
+(function(){
+  // collapsible groups: clicking an h2 toggles its following .item siblings
+  function itemsAfter(h2){
+    var els=[],n=h2.nextElementSibling;
+    while(n && n.tagName!=='H2'){ if(n.classList.contains('item')) els.push(n); n=n.nextElementSibling; }
+    return els;
+  }
+  document.querySelectorAll('h2').forEach(function(h2){
+    h2.addEventListener('click',function(){
+      var collapsed=h2.classList.toggle('collapsed');
+      itemsAfter(h2).forEach(function(it){ it.classList.toggle('hidden',collapsed); });
+    });
+  });
+  // force-refresh every slot image past the browser cache (this env rejects ?query cache-busting,
+  // so we refetch as a blob with cache:'reload' and swap in an object URL)
+  document.querySelectorAll('.slot img').forEach(function(img){
+    var src=img.getAttribute('src');
+    fetch(src,{cache:'reload'}).then(function(r){
+      if(!r.ok) throw 0;
+      return r.blob();
+    }).then(function(b){
+      img.src=URL.createObjectURL(b);
+      img.parentNode.classList.remove('miss');
+    }).catch(function(){
+      img.parentNode.classList.add('miss');
+    });
+  });
+  // scroll to top
+  var btn=document.getElementById('toTop');
+  btn.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+  window.addEventListener('scroll',function(){ btn.classList.toggle('show',window.scrollY>400); });
+})();
+</script>
+</body></html>

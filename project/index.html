@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>乙級技術士學科測驗模擬機 · 建築物室內設計</title>
+  <link rel="stylesheet" href="styles.css?v=23" />
+  <script>
+    // set theme before paint to avoid flash
+    (function () {
+      try {
+        var t = localStorage.getItem('ylab_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <div id="root">
+    <!-- 載入骨架：React 掛載時會自動被取代 -->
+    <div class="skeleton">
+      <div class="sk-topbar">
+        <div class="wrap sk-topbar-inner">
+          <div class="sk-block sk-mark"></div>
+          <div class="sk-brand-txt">
+            <div class="sk-block" style="width:150px;height:15px"></div>
+            <div class="sk-block" style="width:96px;height:11px"></div>
+          </div>
+          <div class="sk-spacer"></div>
+          <div class="sk-block sk-icon"></div>
+        </div>
+      </div>
+      <div class="wrap sk-home">
+        <div class="sk-block" style="width:120px;height:13px"></div>
+        <div class="sk-block" style="width:min(88%,520px);height:42px;margin-top:18px"></div>
+        <div class="sk-block" style="width:min(64%,360px);height:42px;margin-top:12px"></div>
+        <div class="sk-block" style="width:min(90%,560px);height:16px;margin-top:22px"></div>
+        <div class="sk-block" style="width:min(70%,420px);height:16px;margin-top:10px"></div>
+        <div class="sk-stat-row">
+          <div class="sk-stat">
+            <div class="sk-block" style="width:58px;height:26px"></div>
+            <div class="sk-block" style="width:72px;height:12px"></div>
+          </div>
+          <div class="sk-stat">
+            <div class="sk-block" style="width:58px;height:26px"></div>
+            <div class="sk-block" style="width:72px;height:12px"></div>
+          </div>
+          <div class="sk-stat">
+            <div class="sk-block" style="width:58px;height:26px"></div>
+            <div class="sk-block" style="width:72px;height:12px"></div>
+          </div>
+        </div>
+        <div class="sk-section">
+          <div class="sk-block" style="width:88px;height:15px"></div>
+          <div class="sk-block" style="width:130px;height:13px"></div>
+        </div>
+        <div class="sk-cards">
+          <div class="sk-card">
+            <div class="sk-block" style="width:20px;height:13px;flex:none"></div>
+            <div class="sk-card-body">
+              <div class="sk-block" style="width:46%;height:18px"></div>
+              <div class="sk-block" style="width:74%;height:13px"></div>
+            </div>
+            <div class="sk-block" style="width:18px;height:18px;border-radius:50%;flex:none"></div>
+          </div>
+          <div class="sk-card">
+            <div class="sk-block" style="width:20px;height:13px;flex:none"></div>
+            <div class="sk-card-body">
+              <div class="sk-block" style="width:38%;height:18px"></div>
+              <div class="sk-block" style="width:66%;height:13px"></div>
+            </div>
+            <div class="sk-block" style="width:18px;height:18px;border-radius:50%;flex:none"></div>
+          </div>
+          <div class="sk-card">
+            <div class="sk-block" style="width:20px;height:13px;flex:none"></div>
+            <div class="sk-card-body">
+              <div class="sk-block" style="width:42%;height:18px"></div>
+              <div class="sk-block" style="width:70%;height:13px"></div>
+            </div>
+            <div class="sk-block" style="width:18px;height:18px;border-radius:50%;flex:none"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <!-- Load the question bank from per-subject JSON files, then boot core + UI.
+       Edit data/bank-<code>.json directly — changes take effect on reload. -->
+  <script>
+    (async function bootExam() {
+      var CODES = ['12500', '90006', '90007', '90008', '90009'];
+      try {
+        var parts = await Promise.all(CODES.map(function (c) {
+          return fetch('data/bank-' + c + '.json').then(function (r) {
+            if (!r.ok) throw new Error('bank-' + c + '.json ' + r.status);
+            return r.json();
+          });
+        }));
+        // Promise.all preserves order, so the bank keeps its original code sequence
+        var bank = parts.flat();
+        // ---- 套用後台「儲存即生效」的覆寫層（localStorage draft）----
+        try {
+          var draft = JSON.parse(localStorage.getItem('ylab_admin_draft_v1') || '{}');
+          if (draft && typeof draft === 'object') {
+            bank = bank.map(function (q) {
+              var d = draft[q.id];
+              return d ? Object.assign({}, q, d) : q;
+            });
+          }
+        } catch (e) { /* 覆寫層損毀則略過，使用原始題庫 */ }
+        window.QUESTION_BANK = bank;
+      } catch (e) {
+        document.getElementById('root').innerHTML =
+          '<div style="max-width:560px;margin:80px auto;font-family:sans-serif;line-height:1.7;color:#b4651b">'
+          + '<h2>題庫載入失敗</h2><p>無法讀取 data/ 內的題庫 JSON：<code>' + e.message + '</code></p>'
+          + '<p>請透過預覽伺服器開啟本頁（直接以 file:// 開啟會被瀏覽器阻擋 fetch）。</p></div>';
+        return;
+      }
+      // core logic (plain JS) — reads window.QUESTION_BANK
+      await new Promise(function (res, rej) {
+        var s = document.createElement('script');
+        s.src = 'exam-core.js'; s.onload = res; s.onerror = rej;
+        document.body.appendChild(s);
+      });
+      // UI (JSX, order matters: deps first) — appended then transpiled by Babel
+      ['icons.jsx', 'qimage.jsx', 'home.jsx', 'practice.jsx', 'exam-screen.jsx', 'result.jsx', 'app.jsx']
+        .forEach(function (src) {
+          var s = document.createElement('script');
+          s.type = 'text/babel'; s.src = src;
+          document.body.appendChild(s);
+        });
+      Babel.transformScriptTags();
+    })();
+  </script>
+</body>
+</html>
