@@ -13,11 +13,12 @@ function isOptionImageQ(q) {
 // 行內標記：[[img:ID]] → 行內小圖（images/ID.png）；[[sub:X]] → 下標文字
 const RICH_RE = /\[\[(img|sub):([^\]]+)\]\]/g;
 function hasInlineImg(text) { return typeof text === 'string' && /\[\[img:/.test(text); }
+const imgRoot = () => (window.IMG_ROOT || 'images/');
 
 function InlineFig({ id }) {
   const [failed, setFailed] = React.useState(false);
   if (failed) return <span className="inline-fig-missing mono">[圖待補 {id}]</span>;
-  return <img className="inline-fig" src={'images/' + id + '.png'} alt={id} onError={() => setFailed(true)} />;
+  return <img className="inline-fig" src={imgRoot() + id + '.png'} alt={id} onError={() => setFailed(true)} />;
 }
 
 function RichText({ text }) {
@@ -57,7 +58,7 @@ function StemImage({ q }) {
   }
   return (
     <figure className="q-figure">
-      <img src={'images/' + q.id + '.png'} alt={'題 ' + q.id + ' 圖示'} onError={() => setFailed(true)} />
+      <img src={imgRoot() + q.id + '.png'} alt={'題 ' + q.id + ' 圖示'} onError={() => setFailed(true)} />
     </figure>
   );
 }
@@ -70,7 +71,7 @@ function OptionImage({ q, n }) {
   }
   return (
     <span className="opt-figure">
-      <img src={'images/' + q.id + '-' + n + '.png'} alt={'選項 ' + n} onError={() => setFailed(true)} />
+      <img src={imgRoot() + q.id + '-' + n + '.png'} alt={'選項 ' + n} onError={() => setFailed(true)} />
     </span>
   );
 }

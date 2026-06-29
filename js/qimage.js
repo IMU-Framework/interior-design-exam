@@ -15,6 +15,7 @@ const RICH_RE = /\[\[(img|sub):([^\]]+)\]\]/g;
 function hasInlineImg(text) {
   return typeof text === 'string' && /\[\[img:/.test(text);
 }
+const imgRoot = () => (window.IMG_ROOT || 'images/');
 function InlineFig({
   id
 }) {
@@ -24,7 +25,7 @@ function InlineFig({
   }, "[\u5716\u5F85\u88DC ", id, "]");
   return /*#__PURE__*/React.createElement("img", {
     className: "inline-fig",
-    src: 'images/' + id + '.png',
+    src: imgRoot() + id + '.png',
     alt: id,
     onError: () => setFailed(true)
   });
@@ -74,7 +75,7 @@ function StemImage({
   return /*#__PURE__*/React.createElement("figure", {
     className: "q-figure"
   }, /*#__PURE__*/React.createElement("img", {
-    src: 'images/' + q.id + '.png',
+    src: imgRoot() + q.id + '.png',
     alt: '題 ' + q.id + ' 圖示',
     onError: () => setFailed(true)
   }));
@@ -94,7 +95,7 @@ function OptionImage({
   return /*#__PURE__*/React.createElement("span", {
     className: "opt-figure"
   }, /*#__PURE__*/React.createElement("img", {
-    src: 'images/' + q.id + '-' + n + '.png',
+    src: imgRoot() + q.id + '-' + n + '.png',
     alt: '選項 ' + n,
     onError: () => setFailed(true)
   }));
